@@ -1,35 +1,23 @@
-let eye = document.querySelector(".eye")
-let inputPass = document.querySelector(".pass")
+const express = require('express');
+const app = express();
+const PORT = 3000;
 
-eye.addEventListener("click", function() {
-    if(inputPass.type === "password") {
-        inputPass.type = "text"
-        eye.src = "photo_2025-02-22_11-31-36.jpg";
-    }
-    else{
-        inputPass.type = "password";
-        eye.src = "photo_2025-02-21_17-23-45.jpg";
-    }
+app.get('/hello', (req, res) => {
+    res.send('Привіт, світ!');
 });
 
-let info = {}
-let emailInput = document.querySelector("#email")
-let passInput = document.querySelector(".pass")
-
-emailInput.addEventListener("input", function() {
-    info.email = this.value
+app.get('/json', (req, res) => {
+    res.json({ "message": "Це JSON-відповідь" });
 });
 
-passInput.addEventListener("input", function(){
-    info.pass = this.value
+app.get('/user/:id', (req, res) => {
+    res.send(Користувач з ID: ${req.params.id});
 });
 
+app.get('/search', (req, res) => {
+    res.send(Пошук за запитом: ${req.query.q});
+});
 
-const emailLog = document.querySelector("#email")
-const passLog = document.querySelector(".pass")
-const button = document.querySelector(".back-info")
-
-button.addEventListener("click", function(){
-    console.log(emailLog.value)
-    console.log(passLog.value)
+app.listen(PORT, () => {
+    console.log(Сервер запущено на порту ${PORT});
 });
