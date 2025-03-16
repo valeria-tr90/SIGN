@@ -11,13 +11,13 @@ app.get('/json', (req, res) => {
 });
 
 app.get('/user/:id', (req, res) => {
-    res.send(Користувач з ID: ${req.params.id});
+    res.send(`Користувач з ID: ${req.params.id}`);
 });
 
 app.get('/search', (req, res) => {
-    res.send(Пошук за запитом: ${req.query.q});
+    res.send(`Пошук за запитом: ${req.query.q}`);
 });
 
 app.listen(PORT, () => {
-    console.log(Сервер запущено на порту ${PORT});
+    console.log(`Сервер запущено на порту ${PORT}`);
 });
