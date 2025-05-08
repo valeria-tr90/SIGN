@@ -85,7 +85,52 @@ app.delete('/upgrades/:id', (req, res) => {
   res.status(204).send();
 });
 
+let users = []; // Масив для зберігання користувачів
 
+// Реєстрація
+app.post('/sign-up', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: "Email і пароль обов'язкові" });
+  }
+
+  if (password.length < 8) {
+    return res.status(400).json({ error: "Пароль має містити мінімум 8 символів " });
+  }
+
+  const existingUser = users.find(user => user.email === email);
+  if (existingUser) {
+    return res.status(400).json({ error: "Користувач з таким email вже існує" });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10); 
+  users.push({ email, password: hashedPassword });
+
+  res.status(201).json({ message: "Реєстрація успішна!!!" });
+});
+
+// Авторизація
+app.post('/sign-in', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: "Email і пароль обов'язкові" });
+  }
+
+  const user = users.find(user => user.email === email);
+  if (!user) {
+    return res.status(401).json({ error: "Email або пароль невірний" });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    return res.status(401).json({ error: " Email або пароль невірний" });
+  }
+
+  const token = crypto.randomBytes(16).toString('hex'); І
+  res.status(200).json({ token });
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
